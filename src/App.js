@@ -26,6 +26,8 @@ class App extends Component {
       zoom: 13
     })
 
+    const largeInfowindow = new google.maps.InfoWindow()
+
     const defaultIcon = makeMarkerIcon('0091ff')
     const highlightedIcon = makeMarkerIcon('FFFF24')
 
@@ -34,8 +36,6 @@ class App extends Component {
     for (let i = 0; i < locations.length; i++) {
       let position = locations[i].location
       let title = locations[i].title
-      let foursquare_id = locations[i].foursquare
-      var foursquare_html = ''
 
       let marker = new google.maps.Marker({
         map: self.map,
@@ -52,6 +52,10 @@ class App extends Component {
 
       marker.addListener('mouseout', function() {
         this.setIcon(defaultIcon)
+      })
+
+      marker.addListener('click', function() {
+        populateInfoWindow(self.map, this, largeInfowindow)
       })
 
       markers.push(marker)
@@ -98,4 +102,63 @@ const makeMarkerIcon = markerColor => {
     new google.maps.Size(21, 34)
   )
   return markerImage
+}
+
+const populateInfoWindow = (map, marker, infowindow) => {
+  if (infowindow.marker !== marker) {
+    infowindow.setContent('')
+    infowindow.marker = marker
+
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null
+    })
+    let streetViewService = new google.maps.StreetViewService()
+    const radius = 500
+
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null
+    })
+
+    let infoWindowContent = '<div>' + marker.title + '</div><div id="pano"></div>'
+
+    const getStreetView = (data, status) => {
+      if (status === google.maps.StreetViewStatus.OK) {
+        const nearStreetViewLocation = data.location.latLng
+        const heading = google.maps.geometry.spherical.computeHeading(
+          nearStreetViewLocation,
+          marker.position
+        )
+        infowindow.setContent(infoWindowContent)
+
+        const panoramaOptions = {
+          position: nearStreetViewLocation,
+          pov: {
+            heading,
+            pitch: 30
+          }
+        }
+        new google.maps.StreetViewPanorama(
+          document.getElementById('pano'),
+          panoramaOptions
+        )
+      } else {
+        infowindow.setContent(
+          '<div>' +
+            marker.title +
+            '</div>' +
+            '<div>No Street View Found</div>'
+        )
+      }
+    }
+
+    streetViewService.getPanoramaByLocation(
+      marker.position,
+      radius,
+      getStreetView
+    )
+
+    infowindow.setContent(infoWindowContent)
+
+    infowindow.open(map, marker)
+  }
 }
