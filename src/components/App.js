@@ -1,27 +1,37 @@
 import React, { Component } from 'react'
 import './App.css'
 import Menu from './Menu'
-import { locations } from './locations.js'
+import { locations } from '../locations.js'
 
 /* global google */
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      markers: []
+    }
+  }
+
   componentDidMount() {
-    // Connect the initMap() function within this class to the global window context,
-    // so Google Maps can invoke it
-    window.initMap = this.initMap
-    // Asynchronously load the Google Maps script, passing in the callback reference
+    window.initMap = this.initMap.bind(this)
+
     loadJS(
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap',
       this.mapFail
     )
+
+    //this.toggleBounce = toggleBounce.bind(this)
+    //this.stopToggleBounce = stopToggleBounce.bind(this)
+
   }
 
   initMap() {
-    let self = this
     let markers = []
 
-    self.map = new google.maps.Map(document.getElementById('map'), {
+    let map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -15.8012908, lng: -47.8675807 },
       zoom: 13
     })
@@ -38,7 +48,7 @@ class App extends Component {
       let title = locations[i].title
 
       let marker = new google.maps.Marker({
-        map: self.map,
+        map,
         position,
         title,
         animation: google.maps.Animation.DROP,
@@ -55,7 +65,8 @@ class App extends Component {
       })
 
       marker.addListener('click', function() {
-        populateInfoWindow(self.map, this, largeInfowindow)
+        populateInfoWindow(map, this, largeInfowindow)
+        toggleBounce(this)
       })
 
       markers.push(marker)
@@ -63,7 +74,10 @@ class App extends Component {
       bounds.extend(markers[i].position)
     }
 
-    self.map.fitBounds(bounds)
+    this.setState({ markers })
+
+    map.fitBounds(bounds)
+
   }
 
   mapFail() {
@@ -109,8 +123,9 @@ const populateInfoWindow = (map, marker, infowindow) => {
     infowindow.setContent('')
     infowindow.marker = marker
 
-    infowindow.addListener('closeclick', function() {
+    infowindow.addListener('closeclick', () => {
       infowindow.marker = null
+      this.stopToggleBounce()
     })
     let streetViewService = new google.maps.StreetViewService()
     const radius = 500
@@ -161,4 +176,20 @@ const populateInfoWindow = (map, marker, infowindow) => {
 
     infowindow.open(map, marker)
   }
+}
+
+const toggleBounce = (selectedMarker) => {
+  stopToggleBounce(this.state.markers)
+  if (selectedMarker.getAnimation() !== null) {
+    selectedMarker.setAnimation(null)
+  } else {
+    selectedMarker.setAnimation(google.maps.Animation.BOUNCE)
+  }
+}
+
+const stopToggleBounce = () => {
+  this.state.markers.map((marker) => {
+    return (marker.getAnimation !== null) &&
+      marker.setAnimation(null)
+  })
 }
