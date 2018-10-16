@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
+import Menu from './Menu'
 import { locations } from './locations.js'
 
 /* global google */
@@ -66,13 +67,18 @@ class App extends Component {
   }
 
   render() {
-    return <div id="map" />
+    return (
+      <div>
+        <Menu locations={locations} />
+        <div id="map" />
+      </div>
+    )
   }
 }
 
 export default App
 
-function loadJS(src, mapFail) {
+const loadJS = (src, mapFail) => {
   var ref = window.document.getElementsByTagName('script')[0]
   var script = window.document.createElement('script')
   script.src = src
