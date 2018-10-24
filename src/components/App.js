@@ -6,9 +6,8 @@ import { locations } from '../locations.js'
 /* global google */
 
 class App extends Component {
-
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       markers: []
@@ -25,10 +24,10 @@ class App extends Component {
 
     //this.toggleBounce = toggleBounce.bind(this)
     //this.stopToggleBounce = stopToggleBounce.bind(this)
-
   }
 
   initMap() {
+    const self = this
     let markers = []
 
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -66,7 +65,7 @@ class App extends Component {
 
       marker.addListener('click', function() {
         populateInfoWindow(map, this, largeInfowindow)
-        toggleBounce(this)
+        toggleBounce(self, this)
       })
 
       markers.push(marker)
@@ -77,7 +76,6 @@ class App extends Component {
     this.setState({ markers })
 
     map.fitBounds(bounds)
-
   }
 
   mapFail() {
@@ -125,7 +123,7 @@ const populateInfoWindow = (map, marker, infowindow) => {
 
     infowindow.addListener('closeclick', () => {
       infowindow.marker = null
-      this.stopToggleBounce()
+      stopToggleBounce(marker)
     })
     let streetViewService = new google.maps.StreetViewService()
     const radius = 500
@@ -134,7 +132,8 @@ const populateInfoWindow = (map, marker, infowindow) => {
       infowindow.marker = null
     })
 
-    let infoWindowContent = '<div>' + marker.title + '</div><div id="pano"></div>'
+    let infoWindowContent =
+      '<div>' + marker.title + '</div><div id="pano"></div>'
 
     const getStreetView = (data, status) => {
       if (status === google.maps.StreetViewStatus.OK) {
@@ -158,10 +157,7 @@ const populateInfoWindow = (map, marker, infowindow) => {
         )
       } else {
         infowindow.setContent(
-          '<div>' +
-            marker.title +
-            '</div>' +
-            '<div>No Street View Found</div>'
+          '<div>' + marker.title + '</div>' + '<div>No Street View Found</div>'
         )
       }
     }
@@ -178,8 +174,8 @@ const populateInfoWindow = (map, marker, infowindow) => {
   }
 }
 
-const toggleBounce = (selectedMarker) => {
-  stopToggleBounce(this.state.markers)
+const toggleBounce = (that, selectedMarker) => {
+  stopToggleBounce(that.state.markers)
   if (selectedMarker.getAnimation() !== null) {
     selectedMarker.setAnimation(null)
   } else {
@@ -187,9 +183,11 @@ const toggleBounce = (selectedMarker) => {
   }
 }
 
-const stopToggleBounce = () => {
-  this.state.markers.map((marker) => {
-    return (marker.getAnimation !== null) &&
-      marker.setAnimation(null)
-  })
+const stopToggleBounce = mk => {
+  Array.isArray(mk)
+    ? mk.map(marker => markerAnimationToNull(marker))
+    : markerAnimationToNull(mk)
 }
+
+const markerAnimationToNull = mk =>
+  mk.getAnimation !== null && mk.setAnimation(null)
