@@ -3,19 +3,19 @@ import './menu.css'
 
 class Menu extends Component {
   render() {
-    const { locations } = this.props
+    const { locations, choose, hide, show } = this.props
     return (
       <div className="collapsible-menu">
         <input type="checkbox" id="menu" />
         <label htmlFor="menu">Filter</label>
         <div className="menu-content">
           <input type="text" placeholder="Type your filter" />
-          <button>Hide All Markers</button>
-          <button>Show All Markers</button>
+          <button onClick={() => hide()}>Hide All Markers</button>
+          <button onClick={() => show()}>Show All Markers</button>
           <ul>
             {locations.map(local => (
               <li key={local.foursquare}>
-                <a>{local.title}</a>
+                <button onClick={() => choose(local)}>{local.title}</button>
               </li>
             ))}
           </ul>

@@ -10,8 +10,16 @@ class App extends Component {
     super(props)
 
     this.state = {
-      markers: []
+      markers: [],
+      infowindow: {},
+      bounds: {},
+      map: {}
     }
+
+    this.chooseALocation = this.chooseALocation.bind(this)
+    this.hideMarkers = this.hideMarkers.bind(this)
+    this.showMarkers = this.showMarkers.bind(this)
+    this.makeMarkerIcon = this.makeMarkerIcon.bind(this)
   }
 
   componentDidMount() {
@@ -21,26 +29,21 @@ class App extends Component {
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap',
       this.mapFail
     )
-
-    //this.toggleBounce = toggleBounce.bind(this)
-    //this.stopToggleBounce = stopToggleBounce.bind(this)
   }
 
   initMap() {
     const self = this
     let markers = []
+    let infowindow = new window.google.maps.InfoWindow()
+    let bounds = new google.maps.LatLngBounds()
 
-    let map = new google.maps.Map(document.getElementById('map'), {
+    const map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -15.8012908, lng: -47.8675807 },
       zoom: 13
     })
 
-    const largeInfowindow = new google.maps.InfoWindow()
-
-    const defaultIcon = makeMarkerIcon('0091ff')
-    const highlightedIcon = makeMarkerIcon('FFFF24')
-
-    let bounds = new google.maps.LatLngBounds()
+    const defaultIcon = this.makeMarkerIcon('0091ff')
+    const highlightedIcon = this.makeMarkerIcon('FFFF24')
 
     for (let i = 0; i < locations.length; i++) {
       let position = locations[i].location
@@ -64,8 +67,8 @@ class App extends Component {
       })
 
       marker.addListener('click', function() {
-        populateInfoWindow(map, this, largeInfowindow)
-        toggleBounce(self, this)
+        self.populateInfoWindow(this, self.largeInfowindow)
+        self.toggleBounce(this)
       })
 
       markers.push(marker)
@@ -73,9 +76,9 @@ class App extends Component {
       bounds.extend(markers[i].position)
     }
 
-    this.setState({ markers })
-
     map.fitBounds(bounds)
+
+    this.setState({ markers, infowindow, bounds, map })
   }
 
   mapFail() {
@@ -85,52 +88,42 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Menu locations={locations} />
+        <Menu
+          locations={locations}
+          choose={this.chooseALocation}
+          hide={this.hideMarkers}
+          show={this.showMarkers}
+        />
         <div id="map" />
       </div>
     )
   }
-}
 
-export default App
+  makeMarkerIcon = markerColor => {
+    var markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
+        markerColor +
+        '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21, 34)
+    )
+    return markerImage
+  }
 
-const loadJS = (src, mapFail) => {
-  var ref = window.document.getElementsByTagName('script')[0]
-  var script = window.document.createElement('script')
-  script.src = src
-  script.onerror = mapFail
-  script.async = true
-  ref.parentNode.insertBefore(script, ref)
-}
+  populateInfoWindow = marker => {
+    const infowindow = this.state.infowindow
 
-const makeMarkerIcon = markerColor => {
-  var markerImage = new google.maps.MarkerImage(
-    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
-      markerColor +
-      '|40|_|%E2%80%A2',
-    new google.maps.Size(21, 34),
-    new google.maps.Point(0, 0),
-    new google.maps.Point(10, 34),
-    new google.maps.Size(21, 34)
-  )
-  return markerImage
-}
-
-const populateInfoWindow = (map, marker, infowindow) => {
-  if (infowindow.marker !== marker) {
     infowindow.setContent('')
     infowindow.marker = marker
 
     infowindow.addListener('closeclick', () => {
       infowindow.marker = null
-      stopToggleBounce(marker)
+      this.stopToggleBounce(marker)
     })
     let streetViewService = new google.maps.StreetViewService()
     const radius = 500
-
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null
-    })
 
     let infoWindowContent =
       '<div>' + marker.title + '</div><div id="pano"></div>'
@@ -157,7 +150,7 @@ const populateInfoWindow = (map, marker, infowindow) => {
         )
       } else {
         infowindow.setContent(
-          '<div>' + marker.title + '</div>' + '<div>No Street View Found</div>'
+          '<div>' + marker.title + '</div><div>No Street View Found</div>'
         )
       }
     }
@@ -170,24 +163,57 @@ const populateInfoWindow = (map, marker, infowindow) => {
 
     infowindow.setContent(infoWindowContent)
 
-    infowindow.open(map, marker)
+    infowindow.open(this.map, marker)
+  }
+
+  toggleBounce = selectedMarker => {
+    this.stopToggleBounce(this.state.markers)
+    if (selectedMarker.getAnimation() !== null) {
+      selectedMarker.setAnimation(null)
+    } else {
+      selectedMarker.setAnimation(google.maps.Animation.BOUNCE)
+    }
+  }
+
+  stopToggleBounce = mk => {
+    Array.isArray(mk)
+      ? mk.map(marker => this.markerAnimationToNull(marker))
+      : this.markerAnimationToNull(mk)
+  }
+
+  markerAnimationToNull = mk =>
+    mk.getAnimation !== null && mk.setAnimation(null)
+
+  chooseALocation(selectedLocation) {
+    const { markers } = this.state
+    this.stopToggleBounce(markers)
+    let marker = markers.find(mk => selectedLocation.title === mk.title)
+    this.toggleBounce(marker)
+    this.populateInfoWindow(marker)
+  }
+
+  showMarkers = () => {
+    const { markers, bounds, map } = this.state
+    markers.map(m => {
+      m.setMap(this.map)
+      bounds.extend(m.position)
+    })
+    console.log(map)
+    map.fitBounds(bounds)
+  }
+
+  hideMarkers = () => {
+    this.state.markers.map(m => m.setMap(null))
   }
 }
 
-const toggleBounce = (that, selectedMarker) => {
-  stopToggleBounce(that.state.markers)
-  if (selectedMarker.getAnimation() !== null) {
-    selectedMarker.setAnimation(null)
-  } else {
-    selectedMarker.setAnimation(google.maps.Animation.BOUNCE)
-  }
-}
+export default App
 
-const stopToggleBounce = mk => {
-  Array.isArray(mk)
-    ? mk.map(marker => markerAnimationToNull(marker))
-    : markerAnimationToNull(mk)
+const loadJS = (src, mapFail) => {
+  var ref = window.document.getElementsByTagName('script')[0]
+  var script = window.document.createElement('script')
+  script.src = src
+  script.onerror = mapFail
+  script.async = true
+  ref.parentNode.insertBefore(script, ref)
 }
-
-const markerAnimationToNull = mk =>
-  mk.getAnimation !== null && mk.setAnimation(null)
