@@ -195,10 +195,9 @@ class App extends Component {
   showMarkers = () => {
     const { markers, bounds, map } = this.state
     markers.map(m => {
-      m.setMap(this.map)
+      m.setMap(map)
       bounds.extend(m.position)
     })
-    console.log(map)
     map.fitBounds(bounds)
   }
 
