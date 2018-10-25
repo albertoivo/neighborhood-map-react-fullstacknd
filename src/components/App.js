@@ -194,7 +194,7 @@ class App extends Component {
 
   showMarkers = () => {
     const { markers, bounds, map } = this.state
-    markers.map(m => {
+    markers.forEach(m => {
       m.setMap(map)
       bounds.extend(m.position)
     })
