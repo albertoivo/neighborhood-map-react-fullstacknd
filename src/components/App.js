@@ -1,7 +1,7 @@
-import React, { Component } from "react"
-import "./App.css"
-import Menu from "./Menu"
-import { locations } from "../locations.js"
+import React, { Component } from 'react'
+import './App.css'
+import Menu from './Menu'
+import { locations } from '../locations.js'
 
 /* global google */
 
@@ -13,8 +13,7 @@ class App extends Component {
       markers: [],
       infowindow: {},
       bounds: {},
-      map: {},
-      locations
+      map: {}
     }
 
     this.chooseALocation = this.chooseALocation.bind(this)
@@ -27,7 +26,7 @@ class App extends Component {
     window.initMap = this.initMap.bind(this)
 
     loadJS(
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap",
+      'https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap',
       this.mapFail
     )
   }
@@ -38,18 +37,17 @@ class App extends Component {
     let infowindow = new window.google.maps.InfoWindow()
     let bounds = new google.maps.LatLngBounds()
 
-    const map = new google.maps.Map(document.getElementById("map"), {
+    const map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -15.8012908, lng: -47.8675807 },
       zoom: 13
     })
 
-    const defaultIcon = this.makeMarkerIcon("0091ff")
-    const highlightedIcon = this.makeMarkerIcon("FFFF24")
+    const defaultIcon = this.makeMarkerIcon('0091ff')
+    const highlightedIcon = this.makeMarkerIcon('FFFF24')
 
-    this.state.locations.forEach((local, idx) => {
+    locations.forEach((local, idx) => {
       const position = local.location
       const title = local.title
-
 
       let marker = new google.maps.Marker({
         map,
@@ -60,20 +58,21 @@ class App extends Component {
         icon: defaultIcon
       })
 
-      marker.addListener("mouseover", function() {
+      marker.addListener('mouseover', function() {
         this.setIcon(highlightedIcon)
       })
 
-      marker.addListener("mouseout", function() {
+      marker.addListener('mouseout', function() {
         this.setIcon(defaultIcon)
       })
 
-      marker.addListener("click", function() {
-        self.foursquareInfoWindow(local.foursquare)
-          .then((json) => {
+      marker.addListener('click', function() {
+        self
+          .foursquareInfoWindow(local.foursquare)
+          .then(json => {
             const fsq = json.response.venue
             if (fsq) {
-              let fsq_html = "Foursquare Likes: " + fsq.likes.summary
+              let fsq_html = 'Foursquare Likes: ' + fsq.likes.summary
               self.populateInfoWindow(this, fsq_html)
             } else {
               self.populateInfoWindow(this, json.meta.errorDetail)
@@ -94,17 +93,18 @@ class App extends Component {
   }
 
   mapFail() {
-    alert("Sorry. Google Maps has failed. Please refresh this page.")
+    alert('Sorry. Google Maps has failed. Please refresh this page.')
   }
 
   render() {
     return (
       <div>
         <Menu
-          locations={this.state.locations}
+          locations={locations}
           choose={this.chooseALocation}
           hide={this.hideMarkers}
           show={this.showMarkers}
+          markers={this.state.markers}
         />
         <div id="map" />
       </div>
@@ -113,9 +113,9 @@ class App extends Component {
 
   makeMarkerIcon = markerColor => {
     var markerImage = new google.maps.MarkerImage(
-      "http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|" +
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
         markerColor +
-        "|40|_|%E2%80%A2",
+        '|40|_|%E2%80%A2',
       new google.maps.Size(21, 34),
       new google.maps.Point(0, 0),
       new google.maps.Point(10, 34),
@@ -129,7 +129,7 @@ class App extends Component {
 
     infowindow.marker = marker
 
-    infowindow.addListener("closeclick", () => {
+    infowindow.addListener('closeclick', () => {
       infowindow.marker = null
       this.stopToggleBounce(marker)
     })
@@ -138,7 +138,7 @@ class App extends Component {
     const radius = 500
 
     let infoWindowContent =
-      "<div>" +
+      '<div>' +
       marker.title +
       '</div><div id="pano"></div><br />' +
       foursquare_html
@@ -160,12 +160,15 @@ class App extends Component {
           }
         }
         new google.maps.StreetViewPanorama(
-          document.getElementById("pano"),
+          document.getElementById('pano'),
           panoramaOptions
         )
       } else {
         infowindow.setContent(
-          "<div>" + marker.title + "</div><div>No Street View Found</div>" + foursquare_html
+          '<div>' +
+            marker.title +
+            '</div><div>No Street View Found</div>' +
+            foursquare_html
         )
       }
     }
@@ -188,25 +191,24 @@ class App extends Component {
     let yyyy = today.getFullYear()
 
     if (dd < 10) {
-      dd = "0" + dd
+      dd = '0' + dd
     }
     if (mm < 10) {
-      mm = "0" + mm
+      mm = '0' + mm
     }
 
-    return yyyy + "" + mm + "" + dd
+    return yyyy + '' + mm + '' + dd
   }
 
   foursquareInfoWindow = foursquare_id => {
-    const CLIENT_ID = "1YBQ5MRZ2OAFCBWN4D5VA0BO4JFIK5HHWOO0U1O5XKR2RBNB"
-    const CLIENT_SECRET = "EMETHNPTZRNMB4HRJF4YNK3SSRE431RXOQKZT3HDLJ1AODOZ"
+    const CLIENT_ID = '1YBQ5MRZ2OAFCBWN4D5VA0BO4JFIK5HHWOO0U1O5XKR2RBNB'
+    const CLIENT_SECRET = 'EMETHNPTZRNMB4HRJF4YNK3SSRE431RXOQKZT3HDLJ1AODOZ'
 
     return fetch(
       `https://api.foursquare.com/v2/venues/${foursquare_id}?&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${this.getDate()}`
     )
       .then(response => response.json())
-      .catch((err) => "erro de fsq: " + err)
-
+      .catch(err => 'erro de fsq: ' + err)
   }
 
   toggleBounce = selectedMarker => {
@@ -235,25 +237,27 @@ class App extends Component {
     this.populateInfoWindow(marker)
   }
 
-  showMarkers = () => {
-    const { markers, bounds, map } = this.state
-    markers.forEach(m => {
+  showMarkers = markers => {
+    const { bounds, map } = this.state
+    const mk = markers ? markers : this.state.markers
+    mk.forEach(m => {
       m.setMap(map)
       bounds.extend(m.position)
     })
     map.fitBounds(bounds)
   }
 
-  hideMarkers = () => {
-    this.state.markers.map(m => m.setMap(null))
+  hideMarkers = markers => {
+    const mk = markers ? markers : this.state.markers
+    mk.map(m => m.setMap(null))
   }
 }
 
 export default App
 
 const loadJS = (src, mapFail) => {
-  var ref = window.document.getElementsByTagName("script")[0]
-  var script = window.document.createElement("script")
+  var ref = window.document.getElementsByTagName('script')[0]
+  var script = window.document.createElement('script')
   script.src = src
   script.onerror = mapFail
   script.async = true
