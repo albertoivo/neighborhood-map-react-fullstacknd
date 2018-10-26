@@ -42,14 +42,12 @@ class Menu extends Component {
             onChange={event => this.search(event.target.value)}
           />
           <button
-            role="button"
             aria-label="Hide All Markers"
             onClick={() => hide()}
           >
             Hide All Markers
           </button>
           <button
-            role="button"
             aria-label="Show All Markers"
             onClick={() => show()}
           >
@@ -57,7 +55,7 @@ class Menu extends Component {
           </button>
           <ul>
             {this.state.locals.map(local => (
-              <li key={local.foursquare} role="option" id={local.title}>
+              <li key={local.foursquare} id={local.title}>
                 <button onClick={() => choose(local)}>{local.title}</button>
               </li>
             ))}
