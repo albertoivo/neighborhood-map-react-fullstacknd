@@ -40,7 +40,7 @@ input#menu {
 }
 
 input:checked+label {
-  background-image: url("./close.png");
+  /*background-image: url("./close.png");*/
 }
 
 .menu-content {
@@ -54,7 +54,7 @@ input:checked+label {
 /* Toggle Effect */
 
 input:checked~label {
-  background-image: url("./close.png");
+  /*background-image: url("./close.png");*/
 }
 
 input:checked~.menu-content {
