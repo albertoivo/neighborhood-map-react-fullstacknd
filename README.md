@@ -14,6 +14,7 @@ Here I show some of my favourite places in Brasília - DF.
 ## Table of contents
 
 -   [Quick start](#quick-start)
+-   [Build a production version](#build-a-production-version)
 -   [Developed with](#developed-with)
 -   [Contributing](#contributing)
 -   [Author](#author)
@@ -27,9 +28,14 @@ Here I show some of my favourite places in Brasília - DF.
 4. `npm install`
 5. `npm start`
 
+## Build a production version
+
+- Just run `npm run build` from the root directory of the project.
+- It will generate a `build` directory.
+
 ## Developed with
 
-* [REACTJS](https://reactjs.org)
+* [ReactJS](https://reactjs.org)
 * [Google Maps API](https://developers.google.com/maps/documentation/javascript/tutorial)
 * [Foursquare API](https://developer.foursquare.com/docs)
 
