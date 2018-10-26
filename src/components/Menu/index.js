@@ -31,19 +31,33 @@ class Menu extends Component {
     const { choose, hide, show } = this.props
     return (
       <div className="collapsible-menu">
-        <input type="checkbox" id="menu" />
+        <input type="checkbox" id="menu" checked={true} />
         <label htmlFor="menu">Filter</label>
         <div className="menu-content">
           <input
             type="text"
+            role="search"
             placeholder="Type your filter"
+            aria-label="Filter the locations"
             onChange={event => this.search(event.target.value)}
           />
-          <button onClick={() => hide()}>Hide All Markers</button>
-          <button onClick={() => show()}>Show All Markers</button>
+          <button
+            role="button"
+            aria-label="Hide All Markers"
+            onClick={() => hide()}
+          >
+            Hide All Markers
+          </button>
+          <button
+            role="button"
+            aria-label="Show All Markers"
+            onClick={() => show()}
+          >
+            Show All Markers
+          </button>
           <ul>
             {this.state.locals.map(local => (
-              <li key={local.foursquare}>
+              <li key={local.foursquare} role="option" id={local.title}>
                 <button onClick={() => choose(local)}>{local.title}</button>
               </li>
             ))}
