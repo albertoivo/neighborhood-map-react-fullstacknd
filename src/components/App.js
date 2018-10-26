@@ -67,23 +67,19 @@ class App extends Component {
       })
 
       marker.addListener('click', function() {
-        self
-          .foursquareInfoWindow(local.foursquare)
-          .then(json => {
-            const fsq = json.response.venue
-            if (fsq) {
-              let fsq_html = 'Foursquare Likes: ' + fsq.likes.summary
-              self.populateInfoWindow(this, fsq_html)
-            } else {
-              self.populateInfoWindow(this, json.meta.errorDetail)
-            }
-          })
-          .catch(err => alert(err))
+        self.foursquareInfoWindow(local.foursquare).then(json => {
+          const fsq = json.response.venue
+          if (fsq) {
+            let fsq_html = 'Foursquare: ' + fsq.likes.summary
+            self.populateInfoWindow(this, fsq_html)
+          } else {
+            self.populateInfoWindow(this, json.meta.errorDetail)
+          }
+        })
         self.toggleBounce(this)
       })
 
       markers.push(marker)
-
       bounds.extend(markers[idx].position)
     })
 
@@ -106,7 +102,7 @@ class App extends Component {
           show={this.showMarkers}
           markers={this.state.markers}
         />
-        <div id="map" />
+        <div id="map" role="application" />
       </div>
     )
   }
