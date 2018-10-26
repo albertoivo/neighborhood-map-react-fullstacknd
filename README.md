@@ -30,7 +30,7 @@ Here I show some of my favourite places in Brasília - DF.
 
 ## Build a production version
 
-- Just run `npm run build` from the root directory of the project.
+- Just run `npm run build` or `yarn build` from the root directory of the project.
 - It will generate a `build` directory.
 
 ## Developed with
