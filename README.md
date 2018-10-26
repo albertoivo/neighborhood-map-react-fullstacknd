@@ -13,12 +13,12 @@ Here I show some of my favourite places in Brasília - DF.
 
 ## Table of contents
 
--   [Quick start](#quick-start)
--   [Build a production version](#build-a-production-version)
--   [Developed with](#developed-with)
--   [Contributing](#contributing)
--   [Author](#author)
--   [License](#license)
+- [Quick start](#quick-start)
+- [Build a production version](#build-a-production-version)
+- [Developed with](#developed-with)
+- [Contributing](#contributing)
+- [Author](#author)
+- [License](#license)
 
 ## Quick start
 
