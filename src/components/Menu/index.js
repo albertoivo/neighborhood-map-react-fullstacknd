@@ -31,7 +31,7 @@ class Menu extends Component {
     const { choose, hide, show } = this.props
     return (
       <div className="collapsible-menu">
-        <input type="checkbox" id="menu" checked={true} />
+        <input type="checkbox" id="menu" defaultChecked={true} />
         <label htmlFor="menu">Filter</label>
         <div className="menu-content">
           <input
@@ -41,16 +41,10 @@ class Menu extends Component {
             aria-label="Filter the locations"
             onChange={event => this.search(event.target.value)}
           />
-          <button
-            aria-label="Hide All Markers"
-            onClick={() => hide()}
-          >
+          <button aria-label="Hide All Markers" onClick={() => hide()}>
             Hide All Markers
           </button>
-          <button
-            aria-label="Show All Markers"
-            onClick={() => show()}
-          >
+          <button aria-label="Show All Markers" onClick={() => show()}>
             Show All Markers
           </button>
           <ul>
