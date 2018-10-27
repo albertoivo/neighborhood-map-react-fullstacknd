@@ -1,12 +1,32 @@
-export const loadJS = (src, mapFail) => {
+/* global google */
+
+const loadJS = (src, mapFail) => {
   var ref = window.document.getElementsByTagName('script')[0]
   var script = window.document.createElement('script')
-  script.src =
-    'https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap'
+  script.src = src
   script.onerror = mapFail
   script.async = true
   ref.parentNode.insertBefore(script, ref)
 }
 
+export const loadGogleMapsAPI = () => {
+  const KEY = 'AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A'
+  loadJS(
+    `https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=initMap`,
+    mapFail
+  )
+}
+
 const mapFail = () =>
   alert('Sorry. Google Maps has failed. Please refresh this page.')
+
+export const makeMarkerIcon = markerColor =>
+  new google.maps.MarkerImage(
+    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
+      markerColor +
+      '|40|_|%E2%80%A2',
+    new google.maps.Size(21, 34),
+    new google.maps.Point(0, 0),
+    new google.maps.Point(10, 34),
+    new google.maps.Size(21, 34)
+  )

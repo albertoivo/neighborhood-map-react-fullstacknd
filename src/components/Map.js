@@ -1,33 +1,26 @@
 import React, { Component } from 'react'
-import './App.css'
+import './Map.css'
 import Menu from './Menu'
-import { locations } from '../locations.js'
-import * as util from '../util/helper.js'
-import { loadJS } from '../util/googlemaps.js'
+import { locations } from '../util/locations.js'
+import { foursquareInfoWindow } from '../api/foursquare.js'
+import { loadGogleMapsAPI, makeMarkerIcon } from '../util/googlemaps.js'
 
 /* global google */
 
-class App extends Component {
+class Map extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       markers: [],
       infowindow: {},
       bounds: {},
       map: {}
     }
-
-    this.chooseALocation = this.chooseALocation.bind(this)
-    this.hideMarkers = this.hideMarkers.bind(this)
-    this.showMarkers = this.showMarkers.bind(this)
-    this.makeMarkerIcon = this.makeMarkerIcon.bind(this)
   }
 
   componentDidMount() {
     window.initMap = this.initMap.bind(this)
-
-    loadJS()
+    loadGogleMapsAPI()
   }
 
   initMap() {
@@ -37,12 +30,11 @@ class App extends Component {
     let bounds = new google.maps.LatLngBounds()
 
     const map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat: -15.8012908, lng: -47.8675807 },
       zoom: 13
     })
 
-    const defaultIcon = this.makeMarkerIcon('0091ff')
-    const highlightedIcon = this.makeMarkerIcon('FFFF24')
+    const defaultIcon = makeMarkerIcon('0091ff')
+    const highlightedIcon = makeMarkerIcon('FFFF24')
 
     locations.forEach((local, idx) => {
       const position = local.location
@@ -66,7 +58,7 @@ class App extends Component {
       })
 
       marker.addListener('click', function() {
-        self.foursquareInfoWindow(local.foursquare).then(json => {
+        foursquareInfoWindow(local.foursquare).then(json => {
           const fsq = json.response.venue
           if (fsq) {
             let fsq_html = 'Foursquare: ' + fsq.likes.summary
@@ -100,19 +92,6 @@ class App extends Component {
         <div id="map" role="application" />
       </div>
     )
-  }
-
-  makeMarkerIcon = markerColor => {
-    var markerImage = new google.maps.MarkerImage(
-      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' +
-        markerColor +
-        '|40|_|%E2%80%A2',
-      new google.maps.Size(21, 34),
-      new google.maps.Point(0, 0),
-      new google.maps.Point(10, 34),
-      new google.maps.Size(21, 34)
-    )
-    return markerImage
   }
 
   populateInfoWindow = (marker, foursquare_html) => {
@@ -175,17 +154,6 @@ class App extends Component {
     infowindow.open(this.map, marker)
   }
 
-  foursquareInfoWindow = foursquare_id => {
-    const CLIENT_ID = '1YBQ5MRZ2OAFCBWN4D5VA0BO4JFIK5HHWOO0U1O5XKR2RBNB'
-    const CLIENT_SECRET = 'EMETHNPTZRNMB4HRJF4YNK3SSRE431RXOQKZT3HDLJ1AODOZ'
-
-    return fetch(
-      `https://api.foursquare.com/v2/venues/${foursquare_id}?&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${util.getDate()}`
-    )
-      .then(response => response.json())
-      .catch(err => 'erro de fsq: ' + err)
-  }
-
   toggleBounce = selectedMarker => {
     this.stopToggleBounce(this.state.markers)
     if (selectedMarker.getAnimation() !== null) {
@@ -204,7 +172,7 @@ class App extends Component {
   markerAnimationToNull = mk =>
     mk.getAnimation !== null && mk.setAnimation(null)
 
-  chooseALocation(selectedLocation) {
+  chooseALocation = selectedLocation => {
     const { markers } = this.state
     this.stopToggleBounce(markers)
     let marker = markers.find(mk => selectedLocation.title === mk.title)
@@ -228,4 +196,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Map
