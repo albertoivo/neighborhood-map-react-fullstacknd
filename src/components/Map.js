@@ -94,7 +94,7 @@ class Map extends Component {
     )
   }
 
-  populateInfoWindow = (marker, foursquare_html) => {
+  populateInfoWindow = (marker, html) => {
     const infowindow = this.state.infowindow
 
     infowindow.marker = marker
@@ -108,10 +108,7 @@ class Map extends Component {
     const radius = 500
 
     let infoWindowContent =
-      '<div>' +
-      marker.title +
-      '</div><div id="pano"></div><br />' +
-      foursquare_html
+      '<div>' + marker.title + '</div><div id="pano"></div><br />' + html
 
     const getStreetView = (data, status) => {
       if (status === google.maps.StreetViewStatus.OK) {
@@ -138,7 +135,7 @@ class Map extends Component {
           '<div>' +
             marker.title +
             '</div><div>No Street View Found</div>' +
-            foursquare_html
+            html
         )
       }
     }
