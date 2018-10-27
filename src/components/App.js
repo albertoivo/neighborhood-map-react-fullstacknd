@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import './App.css'
 import Menu from './Menu'
 import { locations } from '../locations.js'
+import * as util from '../util/helper.js'
+import { loadJS } from '../util/googlemaps.js'
 
 /* global google */
 
@@ -25,10 +27,7 @@ class App extends Component {
   componentDidMount() {
     window.initMap = this.initMap.bind(this)
 
-    loadJS(
-      'https://maps.googleapis.com/maps/api/js?key=AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A&callback=initMap',
-      this.mapFail
-    )
+    loadJS()
   }
 
   initMap() {
@@ -86,10 +85,6 @@ class App extends Component {
     map.fitBounds(bounds)
 
     this.setState({ markers, infowindow, bounds, map })
-  }
-
-  mapFail() {
-    alert('Sorry. Google Maps has failed. Please refresh this page.')
   }
 
   render() {
@@ -180,28 +175,12 @@ class App extends Component {
     infowindow.open(this.map, marker)
   }
 
-  getDate = () => {
-    let today = new Date()
-    let dd = today.getDate()
-    let mm = today.getMonth() + 1
-    let yyyy = today.getFullYear()
-
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-
-    return yyyy + '' + mm + '' + dd
-  }
-
   foursquareInfoWindow = foursquare_id => {
     const CLIENT_ID = '1YBQ5MRZ2OAFCBWN4D5VA0BO4JFIK5HHWOO0U1O5XKR2RBNB'
     const CLIENT_SECRET = 'EMETHNPTZRNMB4HRJF4YNK3SSRE431RXOQKZT3HDLJ1AODOZ'
 
     return fetch(
-      `https://api.foursquare.com/v2/venues/${foursquare_id}?&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${this.getDate()}`
+      `https://api.foursquare.com/v2/venues/${foursquare_id}?&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${util.getDate()}`
     )
       .then(response => response.json())
       .catch(err => 'erro de fsq: ' + err)
@@ -250,12 +229,3 @@ class App extends Component {
 }
 
 export default App
-
-const loadJS = (src, mapFail) => {
-  var ref = window.document.getElementsByTagName('script')[0]
-  var script = window.document.createElement('script')
-  script.src = src
-  script.onerror = mapFail
-  script.async = true
-  ref.parentNode.insertBefore(script, ref)
-}

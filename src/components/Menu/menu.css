@@ -39,12 +39,9 @@ input#menu {
   display: none;
 }
 
-
-/*
 input:checked+label {
   background-image: url("./close.png");
 }
-*/
 
 .menu-content {
   max-height: 0;
@@ -56,12 +53,9 @@ input:checked+label {
 
 /* Toggle Effect */
 
-
-/*
 input:checked~label {
   background-image: url("./close.png");
 }
-*/
 
 input:checked~.menu-content {
   max-height: 100%;

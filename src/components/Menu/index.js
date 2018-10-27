@@ -14,16 +14,16 @@ class Menu extends Component {
       })
       show()
     } else {
-      hide()
       this.setState({
         locals: locations.filter(str =>
           str.title.toUpperCase().includes(query.toUpperCase())
         )
       })
-      const mks = markers.filter(mk =>
+      const filteredMarkers = markers.filter(mk =>
         mk.title.toUpperCase().includes(query.toUpperCase())
       )
-      show(mks)
+      hide()
+      show(filteredMarkers)
     }
   }
 
@@ -31,7 +31,7 @@ class Menu extends Component {
     const { choose, hide, show } = this.props
     return (
       <div className="collapsible-menu">
-        <input type="checkbox" id="menu" defaultChecked={true} />
+        <input type="checkbox" id="menu" />
         <label htmlFor="menu">Filter</label>
         <div className="menu-content">
           <input
@@ -49,7 +49,7 @@ class Menu extends Component {
           </button>
           <ul>
             {this.state.locals.map(local => (
-              <li key={local.foursquare} id={local.title}>
+              <li key={local.foursquare}>
                 <button onClick={() => choose(local)}>{local.title}</button>
               </li>
             ))}
