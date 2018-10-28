@@ -49,7 +49,7 @@ class Menu extends React.PureComponent {
           </button>
           <ul>
             {this.state.locals.map(local => (
-              <li key={local.foursquare}>
+              <li key={local.title}>
                 <button onClick={() => choose(local)}>{local.title}</button>
               </li>
             ))}
