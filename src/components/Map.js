@@ -3,7 +3,7 @@ import './Map.css'
 import Menu from './Menu'
 import { locations } from '../util/locations.js'
 import { foursquareInfoWindow } from '../api/foursquare.js'
-import { loadGogleMapsAPI, makeMarkerIcon } from '../util/googlemaps.js'
+import { loadGogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
 
 /* global google */
 

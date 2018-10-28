@@ -16,10 +16,7 @@ self.addEventListener('install', function onServiceWorkerInstall(event) {
   event.waitUntil(
     // We open a cache…
     caches.open(currentCache).then(function addResourceToCache(cache) {
-      return cache.addAll([
-        './',
-        'favicon.png',
-      ])
+      return cache.addAll(['./', 'favicon.png'])
     })
   )
 })
@@ -35,23 +32,32 @@ self.addEventListener('fetch', function onServiceWorkerFetch(event) {
   event.respondWith(
     // First we look if we can get the (maybe updated)
     // resource from the network
-    fetch(event.request).then(function updateCacheAndReturnNetworkResponse(networkResponse) {
-      console.log('fetch from network for ' + event.request.url + ' successfull, updating cache')
-      caches.open(currentCache).then(function addToCache(cache) {
-        return cache.add(event.request)
+    fetch(event.request)
+      .then(function updateCacheAndReturnNetworkResponse(networkResponse) {
+        console.log(
+          'fetch from network for ' +
+            event.request.url +
+            ' successfull, updating cache'
+        )
+        caches.open(currentCache).then(function addToCache(cache) {
+          return cache.add(event.request)
+        })
+        return networkResponse
       })
-      return networkResponse
-    }).catch(function lookupCachedResponse(reason) {
-      // On failure, look up in the Cache for the requested resource
-      console.log('fetch from network for ' + event.request.url + ' failed:', reason)
-      return caches.match(event.request).then(function returnCachedResponse(cachedResponse) {
-        return cachedResponse
+      .catch(function lookupCachedResponse(reason) {
+        // On failure, look up in the Cache for the requested resource
+        console.log(
+          'fetch from network for ' + event.request.url + ' failed:',
+          reason
+        )
+        return caches
+          .match(event.request)
+          .then(function returnCachedResponse(cachedResponse) {
+            return cachedResponse
+          })
       })
-    })
   )
 })
-
-
 
 function polyfillCache() {
   /* eslint-disable */
@@ -73,47 +79,49 @@ function polyfillCache() {
       }
       NetworkError.prototype = Object.create(Error.prototype)
 
-      return Promise.resolve().then(function() {
-        if (arguments.length < 1) throw new TypeError()
+      return Promise.resolve()
+        .then(function() {
+          if (arguments.length < 1) throw new TypeError()
 
-        // Simulate sequence<(Request or USVString)> binding:
-        var sequence = []
+          // Simulate sequence<(Request or USVString)> binding:
+          var sequence = []
 
-        requests = requests.map(function(request) {
-          if (request instanceof Request) {
-            return request
-          }
-          else {
-            return String(request) // may throw TypeError
-          }
+          requests = requests.map(function(request) {
+            if (request instanceof Request) {
+              return request
+            } else {
+              return String(request) // may throw TypeError
+            }
+          })
+
+          return Promise.all(
+            requests.map(function(request) {
+              if (typeof request === 'string') {
+                request = new Request(request)
+              }
+
+              var scheme = new URL(request.url).protocol
+
+              if (scheme !== 'http:' && scheme !== 'https:') {
+                throw new NetworkError('Invalid scheme')
+              }
+
+              return fetch(request.clone())
+            })
+          )
         })
-
-        return Promise.all(
-          requests.map(function(request) {
-            if (typeof request === 'string') {
-              request = new Request(request)
-            }
-
-            var scheme = new URL(request.url).protocol
-
-            if (scheme !== 'http:' && scheme !== 'https:') {
-              throw new NetworkError('Invalid scheme')
-            }
-
-            return fetch(request.clone())
-          })
-        )
-      }).then(function(responses) {
-        // TODO: check that requests don't overwrite one another
-        // (don't think this is possible to polyfill due to opaque responses)
-        return Promise.all(
-          responses.map(function(response, i) {
-            return cache.put(requests[i], response)
-          })
-        )
-      }).then(function() {
-        return undefined
-      })
+        .then(function(responses) {
+          // TODO: check that requests don't overwrite one another
+          // (don't think this is possible to polyfill due to opaque responses)
+          return Promise.all(
+            responses.map(function(response, i) {
+              return cache.put(requests[i], response)
+            })
+          )
+        })
+        .then(function() {
+          return undefined
+        })
     }
   }
 
@@ -127,12 +135,18 @@ function polyfillCache() {
 
         return cacheNames.reduce(function(chain, cacheName) {
           return chain.then(function() {
-            return match || caches.open(cacheName).then(function(cache) {
-              return cache.match(request, opts)
-            }).then(function(response) {
-              match = response
-              return match
-            })
+            return (
+              match ||
+              caches
+                .open(cacheName)
+                .then(function(cache) {
+                  return cache.match(request, opts)
+                })
+                .then(function(response) {
+                  match = response
+                  return match
+                })
+            )
           })
         }, Promise.resolve())
       })
