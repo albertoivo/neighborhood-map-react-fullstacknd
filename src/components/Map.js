@@ -30,7 +30,23 @@ class Map extends Component {
     let bounds = new google.maps.LatLngBounds()
 
     const map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 13
+      zoom: 12,
+      center: { lat: -15.7217175, lng: -48.0774436 },
+      mapTypeControl: true,
+      mapTypeControlOptions: {
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        position: google.maps.ControlPosition.TOP_CENTER
+      },
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      scaleControl: true,
+      streetViewControl: true,
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.LEFT_TOP
+      },
+      fullscreenControl: true
     })
 
     const defaultIcon = makeMarkerIcon('0091ff')
@@ -89,7 +105,7 @@ class Map extends Component {
           show={this.showMarkers}
           markers={this.state.markers}
         />
-        <div id="map" role="application" />
+        <div id="map" />
       </div>
     )
   }
