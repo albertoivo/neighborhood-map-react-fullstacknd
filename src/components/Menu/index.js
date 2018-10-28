@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './menu.css'
 
-class Menu extends Component {
+class Menu extends React.PureComponent {
   state = {
     locals: this.props.locations
   }
