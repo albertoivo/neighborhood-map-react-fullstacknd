@@ -6,10 +6,10 @@ import './menu.css'
 class Menu extends React.PureComponent {
   constructor(props) {
     super(props)
-      this.state = {
-        locations: this.props.locations,
-        continents: this.visitedContinents()
-      }
+    this.state = {
+      locations: this.props.locations,
+      continents: this.visitedContinents()
+    }
   }
 
   search = query => {
@@ -31,15 +31,19 @@ class Menu extends React.PureComponent {
     }
   }
 
-  chooseContinents = (continente) => {
+  chooseContinents = continente => {
     const { locations, markers, hide, show } = this.props
     this.setState({
       locations: locations.filter(str => str.continente === continente)
     })
-    const filteredLocals = locations.filter(local => local.continente === continente)
+    const filteredLocals = locations.filter(
+      local => local.continente === continente
+    )
     const filteredMarkers = []
     markers.map(mk =>
-      filteredLocals.map(local => mk.title === local.title && filteredMarkers.push(mk))
+      filteredLocals.map(
+        local => mk.title === local.title && filteredMarkers.push(mk)
+      )
     )
     hide()
     show(filteredMarkers)
@@ -59,7 +63,7 @@ class Menu extends React.PureComponent {
     return (
       <div className="collapsible-menu">
         <input type="checkbox" id="menu" />
-        <label htmlFor="menu">Filter</label>
+        <label htmlFor="menu">Nossas Rotas</label>
         <div className="menu-content">
           <input
             type="text"
@@ -75,16 +79,24 @@ class Menu extends React.PureComponent {
             Show All Markers
           </button>
 
-          <p>Visited Continents ({continents.length}):</p>
+          <p>
+            Visited Continents ({continents.length}
+            ):
+          </p>
           <ul>
             {continents.map(continent => (
-                <li key={continent}>
-                  <button onClick={() => this.chooseContinents(continent)}>{continent}</button>
-                </li>
-              ))}
+              <li key={continent}>
+                <button onClick={() => this.chooseContinents(continent)}>
+                  {continent}
+                </button>
+              </li>
+            ))}
           </ul>
-          <br clear='all' />
-          <p>Visited Countries ({locations.length}):</p>
+          <br clear="all" />
+          <p>
+            Visited Countries ({locations.length}
+            ):
+          </p>
           <ul>
             {locations.sort(sortBy('title')).map(local => (
               <li key={local.title}>

@@ -94,7 +94,7 @@ class Map extends Component {
     )
   }
 
-  populateInfoWindow = (marker) => {
+  populateInfoWindow = marker => {
     const infowindow = this.state.infowindow
 
     infowindow.marker = marker
