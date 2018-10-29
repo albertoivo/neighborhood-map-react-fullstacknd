@@ -66,3 +66,13 @@ li {
   padding-right: 30px;
   padding-bottom: 10px;
 }
+
+button {
+  background: transparent;
+  border: none;
+}
+
+button:hover {
+  background-color: #008CBA;
+  color: white;
+}

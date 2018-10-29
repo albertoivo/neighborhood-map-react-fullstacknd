@@ -13,3 +13,5 @@ export const date = () => {
 
   return yyyy + '' + mm + '' + dd
 }
+
+export const onlyUnique = (value, index, self) => self.indexOf(value) === index

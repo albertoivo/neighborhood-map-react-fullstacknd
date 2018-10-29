@@ -1,21 +1,21 @@
 import React from 'react'
+import sortBy from 'sort-by'
+import { onlyUnique } from '../../util/helper.js'
 import './menu.css'
 
 class Menu extends React.PureComponent {
   state = {
-    locals: this.props.locations
+    locations: this.props.locations
   }
 
   search = query => {
     const { locations, markers, hide, show } = this.props
     if (query.trim().length === 0) {
-      this.setState({
-        locals: locations
-      })
+      this.setState({ locations })
       show()
     } else {
       this.setState({
-        locals: locations.filter(str =>
+        locations: locations.filter(str =>
           str.title.toUpperCase().includes(query.toUpperCase())
         )
       })
@@ -27,18 +27,32 @@ class Menu extends React.PureComponent {
     }
   }
 
-  onlyUnique = (value, index, self) => self.indexOf(value) === index
-
-  getContinents = locals => {
-    let continents = []
-    this.state.locals.forEach(local => {
-      return continents.push(local.continente)
+  chooseContinents = (continente) => {
+    const { locations, markers, hide, show } = this.props
+    this.setState({
+      locations: locations.filter(str => str.continente === continente)
     })
-    return continents
+    const filteredLocals = this.state.locations.filter(local => local.continente === continente)
+    const filteredMarkers = []
+    markers.map(mk =>
+      filteredLocals.map(local => mk.title === local.title && filteredMarkers.push(mk))
+    )
+    hide()
+    show(filteredMarkers)
+  }
+
+  getVisitedContinents = () => {
+    let continents = []
+    this.state.locations.forEach(local => {
+      continents.push(local.continente)
+    })
+    return continents.filter(onlyUnique)
   }
 
   render() {
     const { choose, hide, show } = this.props
+    const { locations } = this.state
+    const continents = this.getVisitedContinents().sort()
     return (
       <div className="collapsible-menu">
         <input type="checkbox" id="menu" />
@@ -58,20 +72,18 @@ class Menu extends React.PureComponent {
             Show All Markers
           </button>
 
-          <p>Continentes:</p>
+          <p>Continentes visitados ({continents.length}):</p>
           <ul>
-            {this.getContinents(this.state.locals)
-              .filter(this.onlyUnique)
-              .map(local => (
-                <li key={local.title}>
-                  <button onClick={() => choose(local)}>{local}</button>
+            {continents.map(continent => (
+                <li key={continent}>
+                  <button onClick={() => this.chooseContinents(continent)}>{continent}</button>
                 </li>
               ))}
           </ul>
-
-          <p>Países:</p>
+          <br clear='all' />
+          <p>Países Visitados ({locations.length}):</p>
           <ul>
-            {this.state.locals.map(local => (
+            {locations.sort(sortBy('title')).map(local => (
               <li key={local.title}>
                 <button onClick={() => choose(local)}>{local.title}</button>
               </li>
