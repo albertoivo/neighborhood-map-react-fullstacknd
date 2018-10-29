@@ -27,6 +27,16 @@ class Menu extends React.PureComponent {
     }
   }
 
+  onlyUnique = (value, index, self) => self.indexOf(value) === index
+
+  getContinents = locals => {
+    let continents = []
+    this.state.locals.forEach(local => {
+      return continents.push(local.continente)
+    })
+    return continents
+  }
+
   render() {
     const { choose, hide, show } = this.props
     return (
@@ -47,6 +57,19 @@ class Menu extends React.PureComponent {
           <button aria-label="Show All Markers" onClick={() => show()}>
             Show All Markers
           </button>
+
+          <p>Continentes:</p>
+          <ul>
+            {this.getContinents(this.state.locals)
+              .filter(this.onlyUnique)
+              .map(local => (
+                <li key={local.title}>
+                  <button onClick={() => choose(local)}>{local}</button>
+                </li>
+              ))}
+          </ul>
+
+          <p>Países:</p>
           <ul>
             {this.state.locals.map(local => (
               <li key={local.title}>
