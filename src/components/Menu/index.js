@@ -4,8 +4,12 @@ import { onlyUnique } from '../../util/helper.js'
 import './menu.css'
 
 class Menu extends React.PureComponent {
-  state = {
-    locations: this.props.locations
+  constructor(props) {
+    super(props)
+      this.state = {
+        locations: this.props.locations,
+        continents: this.visitedContinents()
+      }
   }
 
   search = query => {
@@ -32,7 +36,7 @@ class Menu extends React.PureComponent {
     this.setState({
       locations: locations.filter(str => str.continente === continente)
     })
-    const filteredLocals = this.state.locations.filter(local => local.continente === continente)
+    const filteredLocals = locations.filter(local => local.continente === continente)
     const filteredMarkers = []
     markers.map(mk =>
       filteredLocals.map(local => mk.title === local.title && filteredMarkers.push(mk))
@@ -41,9 +45,9 @@ class Menu extends React.PureComponent {
     show(filteredMarkers)
   }
 
-  getVisitedContinents = () => {
+  visitedContinents = () => {
     let continents = []
-    this.state.locations.forEach(local => {
+    this.props.locations.forEach(local => {
       continents.push(local.continente)
     })
     return continents.filter(onlyUnique)
@@ -51,8 +55,7 @@ class Menu extends React.PureComponent {
 
   render() {
     const { choose, hide, show } = this.props
-    const { locations } = this.state
-    const continents = this.getVisitedContinents().sort()
+    const { locations, continents } = this.state
     return (
       <div className="collapsible-menu">
         <input type="checkbox" id="menu" />
@@ -72,7 +75,7 @@ class Menu extends React.PureComponent {
             Show All Markers
           </button>
 
-          <p>Continentes visitados ({continents.length}):</p>
+          <p>Visited Continents ({continents.length}):</p>
           <ul>
             {continents.map(continent => (
                 <li key={continent}>
@@ -81,7 +84,7 @@ class Menu extends React.PureComponent {
               ))}
           </ul>
           <br clear='all' />
-          <p>Países Visitados ({locations.length}):</p>
+          <p>Visited Countries ({locations.length}):</p>
           <ul>
             {locations.sort(sortBy('title')).map(local => (
               <li key={local.title}>
