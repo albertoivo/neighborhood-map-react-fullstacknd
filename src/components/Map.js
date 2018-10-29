@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './Map.css'
 import Menu from './Menu'
 import { locations } from '../util/locations.js'
-import { foursquareInfoWindow } from '../api/foursquare.js'
 import { loadGogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
 
 /* global google */
@@ -30,22 +29,14 @@ class Map extends Component {
     let bounds = new google.maps.LatLngBounds()
 
     const map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 12,
       center: { lat: -15.7217175, lng: -48.0774436 },
-      mapTypeControl: true,
-      mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_CENTER
-      },
+      mapTypeControl: false,
       zoomControl: true,
       zoomControlOptions: {
         position: google.maps.ControlPosition.LEFT_CENTER
       },
       scaleControl: true,
-      streetViewControl: true,
-      streetViewControlOptions: {
-        position: google.maps.ControlPosition.LEFT_TOP
-      },
+      streetViewControl: false,
       fullscreenControl: true
     })
 
@@ -74,15 +65,7 @@ class Map extends Component {
       })
 
       marker.addListener('click', function() {
-        foursquareInfoWindow(local.foursquare).then(json => {
-          const fsq = json.response.venue
-          if (fsq) {
-            let fsq_html = 'Foursquare: ' + fsq.likes.summary
-            self.populateInfoWindow(this, fsq_html)
-          } else {
-            self.populateInfoWindow(this, json.meta.errorDetail)
-          }
-        })
+        self.populateInfoWindow(this)
         self.toggleBounce(this)
       })
 
@@ -110,7 +93,7 @@ class Map extends Component {
     )
   }
 
-  populateInfoWindow = (marker, html) => {
+  populateInfoWindow = (marker) => {
     const infowindow = this.state.infowindow
 
     infowindow.marker = marker
@@ -120,50 +103,9 @@ class Map extends Component {
       this.stopToggleBounce(marker)
     })
 
-    const streetViewService = new google.maps.StreetViewService()
-    const radius = 500
-
-    let infoWindowContent =
-      '<div>' + marker.title + '</div><div id="pano"></div><br />' + html
-
-    const getStreetView = (data, status) => {
-      if (status === google.maps.StreetViewStatus.OK) {
-        const nearStreetViewLocation = data.location.latLng
-        const heading = google.maps.geometry.spherical.computeHeading(
-          nearStreetViewLocation,
-          marker.position
-        )
-        infowindow.setContent(infoWindowContent)
-
-        const panoramaOptions = {
-          position: nearStreetViewLocation,
-          pov: {
-            heading,
-            pitch: 30
-          }
-        }
-        new google.maps.StreetViewPanorama(
-          document.getElementById('pano'),
-          panoramaOptions
-        )
-      } else {
-        infowindow.setContent(
-          '<div>' +
-            marker.title +
-            '</div><div>No Street View Found</div>' +
-            html
-        )
-      }
-    }
-
-    streetViewService.getPanoramaByLocation(
-      marker.position,
-      radius,
-      getStreetView
-    )
+    let infoWindowContent = '<div>' + marker.title + '</div>'
 
     infowindow.setContent(infoWindowContent)
-
     infowindow.open(this.map, marker)
   }
 
@@ -176,10 +118,10 @@ class Map extends Component {
     }
   }
 
-  stopToggleBounce = mk => {
-    Array.isArray(mk)
-      ? mk.map(marker => this.markerAnimationToNull(marker))
-      : this.markerAnimationToNull(mk)
+  stopToggleBounce = marker => {
+    Array.isArray(marker)
+      ? marker.map(mk => this.markerAnimationToNull(mk))
+      : this.markerAnimationToNull(marker)
   }
 
   markerAnimationToNull = mk =>
