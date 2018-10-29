@@ -73,6 +73,7 @@ class Map extends Component {
       bounds.extend(markers[idx].position)
     })
 
+    map.panToBounds(bounds)
     map.fitBounds(bounds)
 
     this.setState({ markers, infowindow, bounds, map })
@@ -130,7 +131,7 @@ class Map extends Component {
   chooseALocation = selectedLocation => {
     const { markers } = this.state
     this.stopToggleBounce(markers)
-    let marker = markers.find(mk => selectedLocation.title === mk.title)
+    const marker = markers.find(mk => selectedLocation.title === mk.title)
     this.toggleBounce(marker)
     this.populateInfoWindow(marker)
   }
@@ -142,6 +143,7 @@ class Map extends Component {
       m.setMap(map)
       bounds.extend(m.position)
     })
+    map.panToBounds(bounds)
     map.fitBounds(bounds)
   }
 
