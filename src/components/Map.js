@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './Map.css'
 import Menu from './Menu'
 import { locations } from '../util/locations.js'
-import { loadGogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
+import { loadGoogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
 
 /* global google */
 
@@ -19,7 +19,7 @@ class Map extends Component {
 
   componentDidMount() {
     window.initMap = this.initMap.bind(this)
-    loadGogleMapsAPI()
+    loadGoogleMapsAPI()
   }
 
   initMap() {

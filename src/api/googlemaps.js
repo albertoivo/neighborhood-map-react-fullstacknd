@@ -9,7 +9,7 @@ const loadJS = (src, mapFail) => {
   ref.parentNode.insertBefore(script, ref)
 }
 
-export const loadGogleMapsAPI = () => {
+export const loadGoogleMapsAPI = () => {
   const KEY = 'AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A'
   loadJS(
     `https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=initMap`,
