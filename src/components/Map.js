@@ -65,6 +65,7 @@ class Map extends Component {
       })
 
       marker.addListener('click', function() {
+        map.setCenter(marker.getPosition());
         self.populateInfoWindow(this)
         self.toggleBounce(this)
       })
