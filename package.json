@@ -2,7 +2,7 @@
   "name": "neighborhood-map-fullstacknd",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://albertoivo.github.io/neighborhood-map-fullstacknd",
+  "homepage": "https://albertoivo.me",
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -14,8 +14,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -27,7 +26,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "gh-pages": "^2.0.1"
+    "@babel/plugin-proposal-class-properties": "^7.1.0"
   }
 }
