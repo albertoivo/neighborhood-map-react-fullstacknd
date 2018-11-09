@@ -1,8 +1,7 @@
 {
-  "name": "neighborhood-map-fullstacknd",
+  "name": "nossas-rotas-map",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://albertoivo.me",
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -26,6 +25,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.1.0"
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "babel-plugin-transform-remove-console": "^6.9.4"
   }
 }
