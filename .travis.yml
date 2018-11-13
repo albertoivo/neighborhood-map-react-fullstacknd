@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+  - node_modules
+script:
+  - npm run build
+deploy:
+  provider: firebase
+  toke:
+    secure: "1/vr8HV5QoNRAVejOchCuje4-VbBd4GnOVru205mLQEkNXMMzjVdO5NU3aYxuKZFlN"
+  message: "deploy via Travis"
+  skip_cleanup: true
+  local_dir: build
+  on:
+    branch: nossas-rotas-map
