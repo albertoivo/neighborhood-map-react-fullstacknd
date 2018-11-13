@@ -63,7 +63,7 @@ class Menu extends React.PureComponent {
     return (
       <div className="collapsible-menu">
         <input type="checkbox" id="menu" />
-        <label htmlFor="menu">Nossas Rotas</label>
+        <label htmlFor="menu">Nossas Rotas Menu</label>
         <div className="menu-content">
           <input
             type="text"
