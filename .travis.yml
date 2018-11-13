@@ -8,7 +8,7 @@ script:
   - npm run build
 deploy:
   provider: firebase
-  toke:
+  token:
     secure: "1/vr8HV5QoNRAVejOchCuje4-VbBd4GnOVru205mLQEkNXMMzjVdO5NU3aYxuKZFlN"
   message: "deploy via Travis"
   skip_cleanup: true
