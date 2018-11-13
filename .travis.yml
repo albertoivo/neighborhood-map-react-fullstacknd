@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "stable"
+  - "lts/*"
 cache:
   directories:
   - node_modules
@@ -10,7 +10,7 @@ deploy:
   provider: firebase
   token:
     secure: "1/vr8HV5QoNRAVejOchCuje4-VbBd4GnOVru205mLQEkNXMMzjVdO5NU3aYxuKZFlN"
-  message: "deploy via Travis"
+  message: "deploy via Travis CI"
   skip_cleanup: true
   local_dir: build
   on:
