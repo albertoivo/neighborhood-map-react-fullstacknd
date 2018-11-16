@@ -1,10 +1,10 @@
 /* global google */
 
-const loadJS = (src, mapFail) => {
+const loadJS = (src) => {
   var ref = window.document.getElementsByTagName('script')[0]
   var script = window.document.createElement('script')
   script.src = src
-  script.onerror = mapFail
+  script.defer = true
   script.async = true
   ref.parentNode.insertBefore(script, ref)
 }
@@ -12,13 +12,9 @@ const loadJS = (src, mapFail) => {
 export const loadGoogleMapsAPI = () => {
   const KEY = 'AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A'
   loadJS(
-    `https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=initMap`,
-    mapFail
+    `https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=initMap`
   )
 }
-
-const mapFail = () =>
-  alert('Sorry. Google Maps has failed. Please refresh this page.')
 
 export const makeMarkerIcon = markerColor =>
   new google.maps.MarkerImage(

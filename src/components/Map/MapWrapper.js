@@ -1,25 +1,35 @@
 import React, { Component } from 'react'
 import './Map.css'
-import Menu from './Menu'
-import { locations } from '../util/locations.js'
-import { loadGoogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
+import Menu from '../Menu/Menu'
+import { locations } from '../../util/locations.js'
+import { loadGoogleMapsAPI, makeMarkerIcon } from '../../api/googlemaps.js'
+import { ErrorBoundary } from '../Error/ErrorBoundary'
 
 /* global google */
 
-class Map extends Component {
+export default class MapWrapper extends Component {
   constructor(props) {
     super(props)
     this.state = {
       markers: [],
       infowindow: {},
       bounds: {},
-      map: {}
+      map: {},
+      error: null,
+      info: null
     }
   }
 
   componentDidMount() {
     window.initMap = this.initMap.bind(this)
     loadGoogleMapsAPI()
+  }
+
+  componentDidCatch(error, info) {
+    this.setState({
+      error,
+      info
+    })
   }
 
   initMap() {
@@ -81,19 +91,21 @@ class Map extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <Menu
-          locations={locations}
-          choose={this.chooseALocation}
-          hide={this.hideMarkers}
-          show={this.showMarkers}
-          markers={this.state.markers}
-        />
-        <div id="map" />
-      </div>
-    )
-  }
+      const { error, info } = this.state
+      return (error || info)
+        ? <ErrorBoundary error={error} info={info} />
+        : <div>
+            <Menu
+              locations={locations}
+              choose={this.chooseALocation}
+              hide={this.hideMarkers}
+              show={this.showMarkers}
+              markers={this.state.markers}
+            />
+            <div id="map" />
+          </div>
+    }
+
 
   populateInfoWindow = marker => {
     const infowindow = this.state.infowindow
@@ -153,5 +165,3 @@ class Map extends Component {
     mk.map(m => m.setMap(null))
   }
 }
-
-export default Map

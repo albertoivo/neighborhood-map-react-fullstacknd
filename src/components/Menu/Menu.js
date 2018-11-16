@@ -80,8 +80,7 @@ class Menu extends React.PureComponent {
           </button>
 
           <p>
-            Visited Continents ({continents.length}
-            ):
+            Visited Continents ({continents.length}):
           </p>
           <ul>
             {continents.map(continent => (
@@ -94,8 +93,7 @@ class Menu extends React.PureComponent {
           </ul>
           <br clear="all" />
           <p>
-            Visited Countries ({locations.length}
-            ):
+            Visited Countries ({locations.length}):
           </p>
           <ul>
             {locations.sort(sortBy('title')).map(local => (
