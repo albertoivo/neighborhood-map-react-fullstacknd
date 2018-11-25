@@ -1,49 +1,10 @@
-# Best places in Brasília
-
+# Countries Visited by Ivo & Mari
 
 ![Certified By Ivo](https://img.shields.io/badge/Certified%20By-Ivo-blue.svg)
 [![Build Status](https://semaphoreapp.com/api/v1/projects/d4cca506-99be-44d2-b19e-176f36ec8cf1/128505/shields_badge.svg)](https://semaphoreapp.com/boennemann/badges)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-
-This is a project for Udacity Course Nanodegree Full Stack Web Developer. It uses ReactJS, Google Maps API and Foursquare API.
-Here I show some of my favourite places in Brasília - DF.
-
-## Table of contents
-
-- [Quick start](#quick-start)
-- [Build a production version](#build-a-production-version)
-- [Developed with](#developed-with)
-- [Contributing](#contributing)
-- [Author](#author)
-- [License](#license)
-
-## Quick start
-
-1. Fork it
-2. Clone it
-3. `cd neighborhood-map-fullstacknd`
-4. `npm install`
-5. `npm start`
-
-## Build a production version
-
-- Just run `npm run build` or `yarn build` from the root directory of the project.
-- It will generate a `build` directory.
-
-## Developed with
-
-* [ReactJS](https://reactjs.org)
-* [Google Maps API](https://developers.google.com/maps/documentation/javascript/tutorial)
-* [Foursquare API](https://developer.foursquare.com/docs)
-
-## Contributing
-
-I welcome contributions to this project!
-
--   ⇄ Pull requests and ★ Stars are always welcome.
 
 ## Author
 
