@@ -91,20 +91,20 @@ export default class MapWrapper extends Component {
   }
 
   render() {
-      const { error, info } = this.state
-      return (error || info)
-        ? <ErrorBoundary error={error} info={info} />
-        : <div>
-            <Menu
-              locations={locations}
-              choose={this.chooseALocation}
-              hide={this.hideMarkers}
-              show={this.showMarkers}
-              markers={this.state.markers}
-            />
-            <div id="map" />
-          </div>
-    }
+    const { error, info } = this.state
+    return (error || info)
+      ? <ErrorBoundary error={error} info={info} />
+      : <div>
+          <Menu
+            locations={locations}
+            choose={this.chooseALocation}
+            hide={this.hideMarkers}
+            show={this.showMarkers}
+            markers={this.state.markers}
+          />
+          <div id="map" />
+        </div>
+  }
 
 
   populateInfoWindow = marker => {
