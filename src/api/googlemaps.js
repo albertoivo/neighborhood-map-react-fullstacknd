@@ -7,6 +7,11 @@ const loadJS = (src, mapFail) => {
   script.onerror = mapFail
   script.async = true
   ref.parentNode.insertBefore(script, ref)
+
+  window.gm_authFailure = () => {
+    let mapview = document.getElementById('map')
+    mapview.innerHTML ='<p class="erro"><strong>Não foi possível carregar o Google Maps.<br> Por favor, recarregue a página.</strong></p>';
+  }
 }
 
 export const loadGogleMapsAPI = () => {
