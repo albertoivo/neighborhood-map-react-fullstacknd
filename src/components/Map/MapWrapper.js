@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import './Map.css'
-import Menu from '../Menu/Menu'
-import { locations } from '../../util/locations.js'
 import { loadGoogleMapsAPI, makeMarkerIcon } from '../../api/googlemaps.js'
-import { ErrorBoundary } from '../Error/ErrorBoundary'
+import { locations } from '../../util/locations.js'
+import Menu from '../Menu/Menu'
+import './Map.css'
 
 /* global google */
 
@@ -23,13 +22,6 @@ export default class MapWrapper extends Component {
   componentDidMount() {
     window.initMap = this.initMap.bind(this)
     loadGoogleMapsAPI()
-  }
-
-  componentDidCatch(error, info) {
-    this.setState({
-      error,
-      info
-    })
   }
 
   initMap() {
@@ -66,16 +58,16 @@ export default class MapWrapper extends Component {
         icon: defaultIcon
       })
 
-      marker.addListener('mouseover', function() {
+      marker.addListener('mouseover', function () {
         this.setIcon(highlightedIcon)
       })
 
-      marker.addListener('mouseout', function() {
+      marker.addListener('mouseout', function () {
         this.setIcon(defaultIcon)
       })
 
-      marker.addListener('click', function() {
-        map.setCenter(marker.getPosition());
+      marker.addListener('click', function () {
+        map.setCenter(marker.getPosition())
         self.populateInfoWindow(this)
         self.toggleBounce(this)
       })
@@ -91,19 +83,18 @@ export default class MapWrapper extends Component {
   }
 
   render() {
-    const { error, info } = this.state
-    return (error || info)
-      ? <ErrorBoundary error={error} info={info} />
-      : <div>
-          <Menu
-            locations={locations}
-            choose={this.chooseALocation}
-            hide={this.hideMarkers}
-            show={this.showMarkers}
-            markers={this.state.markers}
-          />
-          <div id="map" />
-        </div>
+    return (
+      <div>
+        <Menu
+          locations={locations}
+          choose={this.chooseALocation}
+          hide={this.hideMarkers}
+          show={this.showMarkers}
+          markers={this.state.markers}
+        />
+        <div id="map"/>
+      </div>
+    )
   }
 
 
