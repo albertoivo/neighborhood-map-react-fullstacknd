@@ -1,8 +1,8 @@
 /* global google */
 
 const loadJS = (src, mapFail) => {
-  var ref = window.document.getElementsByTagName('script')[0]
-  var script = window.document.createElement('script')
+  let ref = window.document.getElementsByTagName('script')[0]
+  let script = window.document.createElement('script')
   script.src = src
   script.onerror = mapFail
   script.async = true
@@ -10,16 +10,14 @@ const loadJS = (src, mapFail) => {
 
   window.gm_authFailure = () => {
     let mapview = document.getElementById('map')
-    mapview.innerHTML ='<p class="erro"><strong>Não foi possível carregar o Google Maps.<br> Por favor, recarregue a página.</strong></p>';
+    mapview.innerHTML ='<p>Não foi possível carregar o Google Maps.<br> Por favor, recarregue a página.</p>';
   }
 }
 
 export const loadGogleMapsAPI = () => {
+  const URL = 'https://maps.googleapis.com/maps/api/js'
   const KEY = 'AIzaSyCfoloq_rkZTlV9bMcNOCptegicVqCqZ4A'
-  loadJS(
-    `https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=initMap`,
-    mapFail
-  )
+  loadJS(`${URL}?key=${KEY}&callback=initMap`, mapFail)
 }
 
 const mapFail = () =>
