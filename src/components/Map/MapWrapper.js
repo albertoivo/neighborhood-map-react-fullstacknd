@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { loadGoogleMapsAPI, makeMarkerIcon } from '../../api/googlemaps.js'
-import { locations } from '../../util/locations.js'
+import React, {Component} from 'react'
+import {loadGoogleMapsAPI, makeMarkerIcon} from '../../api/googlemaps.js'
+import {locations} from '../../util/locations.js'
 import Menu from '../Menu/Menu'
 import './Map.css'
 
@@ -31,7 +31,7 @@ export default class MapWrapper extends Component {
     let bounds = new google.maps.LatLngBounds()
 
     const map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat: -15.7217175, lng: -48.0774436 },
+      center: {lat: -15.7217175, lng: -48.0774436},
       mapTypeControl: false,
       zoomControl: true,
       zoomControlOptions: {
@@ -79,7 +79,7 @@ export default class MapWrapper extends Component {
     map.panToBounds(bounds)
     map.fitBounds(bounds)
 
-    this.setState({ markers, infowindow, bounds, map })
+    this.setState({markers, infowindow, bounds, map})
   }
 
   render() {
@@ -92,11 +92,10 @@ export default class MapWrapper extends Component {
           show={this.showMarkers}
           markers={this.state.markers}
         />
-        <div id="map"/>
+        <div role="application" aria-roledescription="mapa de países" id="map"/>
       </div>
     )
   }
-
 
   populateInfoWindow = marker => {
     const infowindow = this.state.infowindow
@@ -116,11 +115,11 @@ export default class MapWrapper extends Component {
 
   toggleBounce = selectedMarker => {
     this.stopToggleBounce(this.state.markers)
-    if (selectedMarker.getAnimation() !== null) {
-      selectedMarker.setAnimation(null)
-    } else {
-      selectedMarker.setAnimation(google.maps.Animation.BOUNCE)
-    }
+    selectedMarker.setAnimation(
+      selectedMarker.getAnimation() !== null
+        ? null
+        : google.maps.Animation.BOUNCE
+    )
   }
 
   stopToggleBounce = marker => {
@@ -133,7 +132,7 @@ export default class MapWrapper extends Component {
     mk.getAnimation !== null && mk.setAnimation(null)
 
   chooseALocation = selectedLocation => {
-    const { markers } = this.state
+    const {markers} = this.state
     this.stopToggleBounce(markers)
     const marker = markers.find(mk => selectedLocation.title === mk.title)
     this.toggleBounce(marker)
@@ -141,7 +140,7 @@ export default class MapWrapper extends Component {
   }
 
   showMarkers = markers => {
-    const { bounds, map } = this.state
+    const {bounds, map} = this.state
     const mk = markers ? markers : this.state.markers
     mk.forEach(m => {
       m.setMap(map)

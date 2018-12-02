@@ -62,10 +62,11 @@ class Menu extends React.PureComponent {
     const { locations, continents } = this.state
     return (
       <div className="collapsible-menu">
-        <input type="checkbox" id="menu" />
-        <label htmlFor="menu">Nossas Rotas Menu</label>
+        <input type="checkbox" id="menu" tabIndex={0} />
+        <label htmlFor="menu">Menu</label>
         <div className="menu-content">
           <input
+            tabIndex={0}
             type="text"
             role="search"
             placeholder="Type your filter"
