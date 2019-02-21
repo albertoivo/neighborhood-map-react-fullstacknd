@@ -2,8 +2,15 @@ import React from 'react'
 import './menu.css'
 
 class Menu extends React.PureComponent {
-  state = {
-    locals: this.props.locations
+
+  constructor(props){
+    super(props)
+
+    this.state = {
+      locals: []
+    }
+
+    props.locations.then(result => this.setState({locals: result}) )
   }
 
   search = query => {
@@ -16,11 +23,11 @@ class Menu extends React.PureComponent {
     } else {
       this.setState({
         locals: locations.filter(str =>
-          str.title.toUpperCase().includes(query.toUpperCase())
+          str.venue.name.toUpperCase().includes(query.toUpperCase())
         )
       })
       const filteredMarkers = markers.filter(mk =>
-        mk.title.toUpperCase().includes(query.toUpperCase())
+        mk.venue.name.toUpperCase().includes(query.toUpperCase())
       )
       hide()
       show(filteredMarkers)
@@ -49,8 +56,8 @@ class Menu extends React.PureComponent {
           </button>
           <ul>
             {this.state.locals.map(local => (
-              <li key={local.foursquare}>
-                <button onClick={() => choose(local)}>{local.title}</button>
+              <li key={local.id}>
+                <button onClick={() => choose(local)}>{local.venue.name}</button>
               </li>
             ))}
           </ul>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './Map.css'
 import Menu from './Menu'
-import { locations } from '../util/locations.js'
 import { foursquareInfoWindow, getVenues } from '../api/foursquare.js'
 import { loadGogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
 
@@ -16,6 +15,7 @@ class Map extends Component {
       bounds: {},
       map: {}
     }
+    this.venues = getVenues()
   }
 
   componentDidMount() {
@@ -30,53 +30,56 @@ class Map extends Component {
     let bounds = new google.maps.LatLngBounds()
 
     const map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: -15.7983419, lng: -47.8755394 },
       zoom: 13
     })
 
     const defaultIcon = makeMarkerIcon('0091ff')
     const highlightedIcon = makeMarkerIcon('FFFF24')
 
-    getVenues().then(result => console.log(result))
+    this.venues.then(result => {
 
-    locations.forEach((local, idx) => {
-      const position = local.location
-      const title = local.title
+      result.forEach((local, idx) => {
+        const position = {
+          lat: local.venue.location.lat,
+          lng: local.venue.location.lng
+        }
+        const title = local.venue.name
 
-      let marker = new google.maps.Marker({
-        map,
-        position,
-        title,
-        animation: google.maps.Animation.DROP,
-        id: idx,
-        icon: defaultIcon
-      })
-
-      marker.addListener('mouseover', function() {
-        this.setIcon(highlightedIcon)
-      })
-
-      marker.addListener('mouseout', function() {
-        this.setIcon(defaultIcon)
-      })
-
-      marker.addListener('click', function() {
-        foursquareInfoWindow(local.foursquare).then(json => {
-          const fsq = json.response.venue
-          if (fsq) {
-            let fsq_html = 'Foursquare: ' + fsq.likes.summary
-            self.populateInfoWindow(this, fsq_html)
-          } else {
-            self.populateInfoWindow(this, json.meta.errorDetail)
-          }
+        let marker = new google.maps.Marker({
+          map,
+          position,
+          title,
+          animation: google.maps.Animation.DROP,
+          id: idx,
+          icon: defaultIcon
         })
-        self.toggleBounce(this)
-      })
 
-      markers.push(marker)
-      bounds.extend(markers[idx].position)
-    })
+        marker.addListener('mouseover', function() {
+          this.setIcon(highlightedIcon)
+        })
 
-    map.fitBounds(bounds)
+        marker.addListener('mouseout', function() {
+          this.setIcon(defaultIcon)
+        })
+
+        marker.addListener('click', function() {
+          foursquareInfoWindow(local.venue.id).then(json => {
+            const fsq = json.response.venue
+            if (fsq) {
+              let fsq_html = 'Foursquare: ' + fsq.likes.summary
+              self.populateInfoWindow(this, fsq_html)
+            } else {
+              self.populateInfoWindow(this, json.meta.errorDetail)
+            }
+          })
+          self.toggleBounce(this)
+        })
+
+        markers.push(marker)
+        bounds.extend(markers[idx].position)
+
+    })})
 
     this.setState({ markers, infowindow, bounds, map })
   }
@@ -85,13 +88,13 @@ class Map extends Component {
     return (
       <div>
         <Menu
-          locations={locations}
+          locations={this.venues.then(result => result)}
           choose={this.chooseALocation}
           hide={this.hideMarkers}
           show={this.showMarkers}
           markers={this.state.markers}
         />
-        <div id="map" role="application" />
+        <div id="map" role="application"/>
       </div>
     )
   }
@@ -174,7 +177,7 @@ class Map extends Component {
   chooseALocation = selectedLocation => {
     const { markers } = this.state
     this.stopToggleBounce(markers)
-    let marker = markers.find(mk => selectedLocation.title === mk.title)
+    let marker = markers.find(mk => selectedLocation.venue.name === mk.title)
     this.toggleBounce(marker)
     this.populateInfoWindow(marker)
   }
@@ -193,6 +196,7 @@ class Map extends Component {
     const mk = markers ? markers : this.state.markers
     mk.map(m => m.setMap(null))
   }
+
 }
 
 export default Map

@@ -5,6 +5,7 @@ const CLIENT_ID = '1YBQ5MRZ2OAFCBWN4D5VA0BO4JFIK5HHWOO0U1O5XKR2RBNB'
 const CLIENT_SECRET = 'EMETHNPTZRNMB4HRJF4YNK3SSRE431RXOQKZT3HDLJ1AODOZ'
 
 export const foursquareInfoWindow = foursquare_id => {
+  console.log('entrou no 4sq iw')
   return fetch(
     `https://api.foursquare.com/v2/venues/${foursquare_id}?&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${date()}`
   )
@@ -12,14 +13,14 @@ export const foursquareInfoWindow = foursquare_id => {
     .catch(err => 'erro de fsq: ' + err)
 }
 
-export const getVenues = () => {
+export const getVenues = async () => {
   const endpoint = "https://api.foursquare.com/v2/search/recommendations?"
   const params = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     v: date(),
     near: 'Brasilia, DF',
-    limit: 5
+    limit: 20
   }
   const urlSearch = new URLSearchParams(params)
 
