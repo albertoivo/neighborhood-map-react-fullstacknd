@@ -36,8 +36,7 @@ class Map extends Component {
     const defaultIcon = makeMarkerIcon('0091ff')
     const highlightedIcon = makeMarkerIcon('FFFF24')
 
-    console.log('vai chamar o get venues')
-    getVenues()
+    getVenues().then(result => console.log(result))
 
     locations.forEach((local, idx) => {
       const position = local.location

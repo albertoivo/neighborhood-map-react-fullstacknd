@@ -13,12 +13,16 @@ export const foursquareInfoWindow = foursquare_id => {
 }
 
 export const getVenues = () => {
-  const endpoint = "https://api.foursquare.com/v2/search/recommendations?near=NYC"
+  const endpoint = "https://api.foursquare.com/v2/search/recommendations?"
   const params = {
-    near: 'Chicago, IL'
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    v: date(),
+    near: 'Brasilia, DF',
+    limit: 5
   }
   const urlSearch = new URLSearchParams(params)
-  axios.get(endpoint + urlSearch)
-    .then(result => console.log(result))
-    .catch(error => console.log(error))
+
+  return axios.get(endpoint + urlSearch)
+    .then(result => result.data.response.group.results)
 }

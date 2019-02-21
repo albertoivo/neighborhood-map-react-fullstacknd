@@ -3,7 +3,11 @@
   "author": "Alberto Ivo Vieira",
   "email": "albertoivo@gmail.com",
   "version": "0.1.0",
-  "keywords": ["react", "udacity", "nanodegree"],
+  "keywords": [
+    "react",
+    "udacity",
+    "nanodegree"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/albertoivo/neighborhood-map-react-fullstacknd"
