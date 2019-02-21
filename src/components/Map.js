@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './Map.css'
 import Menu from './Menu'
 import { locations } from '../util/locations.js'
-import { foursquareInfoWindow } from '../api/foursquare.js'
+import { foursquareInfoWindow, getVenues } from '../api/foursquare.js'
 import { loadGogleMapsAPI, makeMarkerIcon } from '../api/googlemaps.js'
 
 /* global google */
@@ -35,6 +35,9 @@ class Map extends Component {
 
     const defaultIcon = makeMarkerIcon('0091ff')
     const highlightedIcon = makeMarkerIcon('FFFF24')
+
+    console.log('vai chamar o get venues')
+    getVenues()
 
     locations.forEach((local, idx) => {
       const position = local.location

@@ -9,6 +9,7 @@
     "url": "https://github.com/albertoivo/neighborhood-map-react-fullstacknd"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-scripts": "^2.1.5"
