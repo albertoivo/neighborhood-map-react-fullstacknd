@@ -18,7 +18,7 @@ export const getVenues = () => {
     near: 'Chicago, IL'
   }
   const urlSearch = new URLSearchParams(params)
-  axios.get(endpoint)
+  axios.get(endpoint + urlSearch)
     .then(result => console.log(result))
     .catch(error => console.log(error))
 }
