@@ -1,12 +1,26 @@
 {
   "name": "neighborhood-map-fullstacknd",
+  "author": "Alberto Ivo Vieira",
+  "email": "albertoivo@gmail.com",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5"
+  "keywords": ["react", "udacity", "nanodegree"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/albertoivo/neighborhood-map-react-fullstacknd"
   },
+  "dependencies": {
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "react-scripts": "^2.1.5"
+  },
+  "contributors": [
+    {
+      "name": "Alberto Ivo Vieira",
+      "url": "albertoivo.github.io",
+      "email": "albertoivo@gmail.com"
+    }
+  ],
+  "license": "SEE LICENSE FILE",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
