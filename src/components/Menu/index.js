@@ -21,6 +21,7 @@ class Menu extends React.PureComponent {
       })
       show()
     } else {
+      console.log('locations', locations)
       this.setState({
         locals: locations.filter(str =>
           str.venue.name.toUpperCase().includes(query.toUpperCase())
