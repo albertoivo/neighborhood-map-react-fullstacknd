@@ -1,11 +1,25 @@
 {
   "name": "nossas-rotas-map",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "author": "Alberto Ivo Vieira",
+  "email": "albertoivo@gmail.com",
+  "homepage": "https://nossasrotas.firebaseapp.com/",
+  "description": "Countries visited by Ivo & Mari",
+  "keywords": [
+    "react",
+    "udacity",
+    "nanodegree"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/albertoivo/neighborhood-map-react-fullstacknd"
+  },
+  "license": "MIT",
   "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "react-scripts": "^2.1.5",
     "sort-by": "^1.2.0"
   },
   "scripts": {
