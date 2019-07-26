@@ -28,7 +28,7 @@ export const locations = [
     continente: 'América do Sul'
   },
   {
-    title: 'Repúplica Dominicana',
+    title: 'República Dominicana',
     location: { lat: 18.724027, lng: -68.831435 },
     foursquare: '5ace9a8fa879213b87f20d36',
     periodo: '',
@@ -98,7 +98,7 @@ export const locations = [
     continente: 'Europa'
   },
   {
-    title: 'Bálgica',
+    title: 'Bélgica',
     location: { lat: 50.622611, lng: 4.804086 },
     foursquare: '5ace9a8fa879213b87f20d36',
     periodo: '',
@@ -173,5 +173,12 @@ export const locations = [
     foursquare: '5ace9a8fa879213b87f20d36',
     periodo: '',
     continente: 'Europa'
+  },
+  {
+    title: 'Panamá',
+    location: { lat: 9.0813885, lng: -79.5932231 },
+    foursquare: '5ace9a8fa879213b87f20d36',
+    periodo: '',
+    continente: 'América Central'
   }
 ]
