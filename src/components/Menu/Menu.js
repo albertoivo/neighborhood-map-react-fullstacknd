@@ -66,7 +66,7 @@ class Menu extends React.PureComponent {
         <label htmlFor="menu">Menu</label>
         <div className="menu-content">
           <input
-            tabIndex={0}
+            tabIndex={1}
             type="text"
             role="search"
             placeholder="Type your filter"
@@ -80,9 +80,7 @@ class Menu extends React.PureComponent {
             Show All Markers
           </button>
 
-          <p>
-            Visited Continents ({continents.length}):
-          </p>
+          <p>Visited Continents ({continents.length}):</p>
           <ul>
             {continents.map(continent => (
               <li key={continent}>
