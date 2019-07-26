@@ -12,4 +12,4 @@
 
 ## License
 
-The license is MIT. But use it at will. You can even call it your own.
+The license is MIT. But you can use it at will. You can even call it your own.
