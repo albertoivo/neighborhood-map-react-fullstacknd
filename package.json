@@ -1,15 +1,17 @@
 {
   "name": "nossas-rotas-map",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "author": "Alberto Ivo Vieira",
   "email": "albertoivo@gmail.com",
   "homepage": "https://nossasrotas.firebaseapp.com/",
   "description": "Countries visited by Ivo & Mari",
   "keywords": [
-    "react",
-    "udacity",
-    "nanodegree"
+    "nossas rotas",
+    "nossasrtoas",
+    "alberto ivo",
+    "albertoivo",
+    "ivo e mari"
   ],
   "repository": {
     "type": "git",
@@ -17,9 +19,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "react": "^16.8.2",
-    "react-dom": "^16.8.2",
-    "react-scripts": "^2.1.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
     "sort-by": "^1.2.0"
   },
   "scripts": {
@@ -39,7 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "babel-plugin-transform-remove-console": "^6.9.4"
   }
 }
